@@ -11,13 +11,17 @@ module Submarine
   end
   
   def self.included(controller)
-    controller.helper_method(:current_subdomain)
+    controller.helper_method(:current_subdomain, :default_subdomain)
   end
     
 protected
 
   def current_subdomain
     request.host.include?('localhost') ? request.subdomains(0).first : request.subdomains.first
+  end
+  
+  def default_subdomain
+    instance_variable_get("@#{Submarine.subdomain_model}").send(Submarine.subdomain_column) if instance_variable_get("@#{Submarine.subdomain_model}")
   end
   
 end 
