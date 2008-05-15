@@ -1,27 +1,26 @@
 module Submarine
-  
-  mattr_writer :subdomain_model
-  def self.subdomain_model
-    @@subdomain_model ||= 'user'
-  end
-  
-  mattr_writer :subdomain_column
-  def self.subdomain_column
-    @@subdomain_column ||= 'login'
-  end
+  mattr_accessor :subdomain_model
+  mattr_accessor :subdomain_column
   
   def self.included(controller)
-    controller.helper_method(:current_subdomain, :default_subdomain)
-  end
+    @@subdomain_model ||= 'user'
+    @@subdomain_column ||= 'login'
     
-protected
-
-  def current_subdomain
-    request.host.include?('localhost') ? request.subdomains(0).first : request.subdomains.first
+    controller.helper_method(:current_subdomain)
   end
   
-  def default_subdomain
-    instance_variable_get("@#{Submarine.subdomain_model}").send(Submarine.subdomain_column) if instance_variable_get("@#{Submarine.subdomain_model}")
-  end
+  protected
   
+    def default_subdomain
+      instance.send(Submarine.subdomain_column) if instance && instance.respond_to?(Submarine.subdomain_column)
+    end
+  
+    def current_subdomain
+      request.host.include?('localhost') ? request.subdomains(0).first : request.subdomains.first
+    end
+  
+  private
+    def instance
+      instance_variable_get "@#{Submarine.subdomain_model}"
+    end
 end 
