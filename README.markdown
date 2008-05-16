@@ -38,6 +38,23 @@ class ApplicationController < ActionController::Base
 end
 </pre>
 
+## Examples
+
+* When accessing either of these URL's http://foo.localhost:3000 or http://foo.domain.com
+
+<pre>
+user_subdomain
+=> 'foo'
+
+user_url
+development => 'http://foo.localhost:3000'
+production => 'http://foo.domain.com'
+
+user_url('bar')
+development => 'http://bar.localhost:3000'
+production => 'http://bar.domain.com'
+</pre>
+
 
 ---
 Copyright (c) 2008 Norbauer Inc, released under the MIT license<br/>
