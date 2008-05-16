@@ -79,17 +79,15 @@ end
 
 If you want to link to each of your blogs when the users visit your domain, you can use the helper methods in your views
 
-<pre>
-...
-<div class="blogs-sidebar">
-	<ul>
-	<% @blogs.each do |blog| %>
-		<li><%= blog_url(blog.name) %></li>
-	<% end %>
-	</ul>
-</div>
-...
-</pre>
+    <div class="sidebar">
+        <ul>
+        <% @blogs.each do |blog| %>
+			<li><%= blog_url(blog.name) %></li>
+		<% end %>
+        </ul>
+    </div>
+
 ---
 Copyright (c) 2008 Norbauer Inc, released under the MIT license<br/>
 Written by Jose Fernandez with support from The Sequoyah Group
+
