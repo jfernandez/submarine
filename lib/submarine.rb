@@ -1,7 +1,7 @@
 module Submarine
   
-  class SubdomainModelError < NoMethodError; end
-  class SubdomainColumnError < NoMethodError; end
+  class SubdomainModelError < StandardError; end
+  class SubdomainColumnError < StandardError; end
   
   mattr_accessor :subdomain_model
   mattr_accessor :subdomain_column
