@@ -11,10 +11,10 @@ module Submarine
     @@subdomain_column ||= 'login'
     
     alias_method "#{@@subdomain_model}_domain", :submarine_domain
-    alias_method "#{@@subdomain_model}_subdomain", :submarine_subdomain
+    #alias_method "#{@@subdomain_model}_subdomain", :submarine_subdomain
     alias_method "#{@@subdomain_model}_host", :submarine_host
     alias_method "#{@@subdomain_model}_url", :submarine_url
-    controller.helper_method("#{@@subdomain_model}_domain", "#{@@subdomain_model}_subdomain", "#{@@subdomain_model}_host", "#{@@subdomain_model}_url")
+    controller.helper_method("#{@@subdomain_model}_domain", "current_subdomain", "#{@@subdomain_model}_host", "#{@@subdomain_model}_url")
   end
   
   protected
@@ -41,7 +41,7 @@ module Submarine
       submarine_domain << request.domain + request.port_string
     end
   
-    def submarine_subdomain
+    def current_subdomain
       request.host.include?('localhost') ? request.subdomains(0).first : request.subdomains.first
     end
   

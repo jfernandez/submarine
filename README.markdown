@@ -1,8 +1,6 @@
 # Submarine
 
-Submarine is a rewrite of the DHH's AccountLocation plugin.  You can set the subdomain AR model and column instead of having to use the Account model.
-
-It also has support for subdomains in a development environment, something AccountLocation lacked.
+Submarine was built upon DHH's [Account Location](http://dev.rubyonrails.org/svn/rails/plugins/account_location/) plugin.  It gives you a set of protected methods that use the subdomain as a way of identifying the current scope. These methods allow you to easily produce URLs that match this style and to get the current subdomain from a request. Submarine includes support for subdomains in a development environment running on localhost.  
 
 ## Localhost Setup (OSX 10.5)
 
@@ -12,7 +10,7 @@ It also has support for subdomains in a development environment, something Accou
 127.0.0.1     localhost foo.localhost bar.localhost
 </pre>
 
-* Then clear the cached DNS entries:
+* Then you must clear the cached DNS entries:
 
 <pre>
 sudo dscacheutil -flushcache
@@ -28,7 +26,9 @@ class ApplicationController < ActionController::Base
 end
 </pre>
 
-* Submarine uses the User model and the 'login' attribute by default (restful_authentication).  To overwrite this, change the following options before including the module:
+* Submarine will generate the following helper methods (using the default settings): `user_url, user_host, user_domain`.  It will also provide you a method to retrieve the current request subdomain: `current_subdomain`
+
+* By default, all helper methods will query @user.login when generating the subdomain part.  You can overwrite these defaults by setting the `subdomain_model` and `subdomain_column` attributes before including the module:
 
 <pre>
 class ApplicationController < ActionController::Base
@@ -38,37 +38,9 @@ class ApplicationController < ActionController::Base
 end
 </pre>
 
+* Doing so will grant you a new set of helper methods, prepending the `subdomain_model` instead of 'user' (using the example above): `account_url, account_host, account_domain`
+
 ## Examples
-
-* When accessing either of these URL's http://foo.localhost:3000 or http://foo.domain.com and there exists a User with login = 'foo' in the DB
-
-<pre>
-user_subdomain
-=> 'foo'
-
-user_url
-in development => 'http://foo.localhost:3000'
-in production => 'http://foo.domain.com'
-
-user_url('bar')
-in development => 'http://bar.localhost:3000'
-in production => 'http://bar.domain.com'
-</pre>
-
-* You can use the model_subdomain method in a before filter to use the subdomain as an account key
-
-<pre>
-GET http://foo.produc.com   
-
-class ProductsController < ApplicationController
-   before_filter load_user
-   
-   def load_user
-      @user = User.find_by_login(user_subdomain_)
-   end
-end 
-</pre>
-
 
 ---
 Copyright (c) 2008 Norbauer Inc, released under the MIT license<br/>
