@@ -1,4 +1,8 @@
 module Submarine
+  
+  class SubdomainModelError < NoMethodError; end
+  class SubdomainColumnError < NoMethodError; end
+  
   mattr_accessor :subdomain_model
   mattr_accessor :subdomain_column
   
@@ -16,7 +20,9 @@ module Submarine
   protected
   
     def default_submarine_subdomain
-      instance.send(Submarine.subdomain_column) if instance && instance.respond_to?(Submarine.subdomain_column)
+      raise SubdomainModelError.new("@#{Submarine.subdomain_model} instance variable not found") if instance.nil?
+      raise SubdomainColumnError.new("@#{Submarine.subdomain_model} does not have a '#{Submarine.subdomain_column}' attribute") unless instance.respond_to?(Submarine.subdomain_column)
+      instance.send(Submarine.subdomain_column)
     end
     
     def submarine_url(submarine_subdomain = default_submarine_subdomain, use_ssl = request.ssl?)
