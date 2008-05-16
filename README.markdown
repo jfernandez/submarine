@@ -40,8 +40,56 @@ end
 
 * Doing so will grant you a new set of helper methods, prepending the `subdomain_model` instead of 'user' (using the example above): `account_url, account_host, account_domain`
 
+* If you pass along a string as a parameter to the helper methods, these will use it for the subdomain part of the URL's.
+
+<pre>
+@account.name
+=> 'quack'
+
+account_url
+=> 'http://quack.domain.com'
+
+account_url('moo')
+=> 'http://moo.domain.com'
+</pre>
+
 ## Examples
 
+You have a domain that hosts several blogs and you wish to shorten their URL from `http://www.domain.com/blogs/fooblog/posts` to `http://fooblog.domain.com/`
+
+<pre>
+def PostsController < ApplicationController
+	Submarine.subdomain_model = 'blog'
+	Submarine.subdomain_column = 'name'
+	include Submarine
+	
+	before_filter :load_blog
+	
+	def index
+		@posts = @blog.posts
+	end
+	
+protected
+
+	def load_blog
+		@blog = Blog.find_by_name(current_subdomain)
+	end
+end
+</pre>
+
+If you want to link to each of your blogs when the users visit your domain, you can use the helper methods in your views
+
+<pre>
+...
+<div class="blogs-sidebar">
+	<ul>
+	<% @blogs.each do |blog| %>
+		<li><%= blog_url(blog.name) %></li>
+	<% end %>
+	</ul>
+</div>
+...
+</pre>
 ---
 Copyright (c) 2008 Norbauer Inc, released under the MIT license<br/>
 Written by Jose Fernandez with support from The Sequoyah Group
