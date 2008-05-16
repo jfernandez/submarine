@@ -43,16 +43,31 @@ end
 * When accessing either of these URL's http://foo.localhost:3000 or http://foo.domain.com
 
 <pre>
+
+@user = User.create(:login => 'foo')   
+   
 user_subdomain
 => 'foo'
 
 user_url
-development => 'http://foo.localhost:3000'
-production => 'http://foo.domain.com'
+in development => 'http://foo.localhost:3000'
+in production => 'http://foo.domain.com'
 
 user_url('bar')
-development => 'http://bar.localhost:3000'
-production => 'http://bar.domain.com'
+in development => 'http://bar.localhost:3000'
+in production => 'http://bar.domain.com'
+</pre>
+
+* You can use the model_subdomain method in a before filter to use the subdomain as an account key
+
+<pre>
+class ProductsController < ApplicationController
+   before_filter load_user
+   
+   def load_user
+      @user = User.find_by_login(user_subdomain)
+   end
+end 
 </pre>
 
 
