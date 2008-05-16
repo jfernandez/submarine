@@ -40,12 +40,9 @@ end
 
 ## Examples
 
-* When accessing either of these URL's http://foo.localhost:3000 or http://foo.domain.com
+* When accessing either of these URL's http://foo.localhost:3000 or http://foo.domain.com and there exists a User with login = 'foo' in the DB
 
 <pre>
-
-@user = User.create(:login => 'foo')   
-   
 user_subdomain
 => 'foo'
 
@@ -61,11 +58,13 @@ in production => 'http://bar.domain.com'
 * You can use the model_subdomain method in a before filter to use the subdomain as an account key
 
 <pre>
+GET http://foo.produc.com   
+
 class ProductsController < ApplicationController
    before_filter load_user
    
    def load_user
-      @user = User.find_by_login(user_subdomain)
+      @user = User.find_by_login(user_subdomain_)
    end
 end 
 </pre>
