@@ -11,7 +11,6 @@ module Submarine
     @@subdomain_column ||= 'login'
     
     alias_method "#{@@subdomain_model}_domain", :submarine_domain
-    #alias_method "#{@@subdomain_model}_subdomain", :submarine_subdomain
     alias_method "#{@@subdomain_model}_host", :submarine_host
     alias_method "#{@@subdomain_model}_url", :submarine_url
     controller.helper_method("#{@@subdomain_model}_domain", "current_subdomain", "#{@@subdomain_model}_host", "#{@@subdomain_model}_url")

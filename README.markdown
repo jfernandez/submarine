@@ -89,5 +89,5 @@ If you want to link to each of your blogs when the users visit your domain, you 
 
 ---
 Copyright (c) 2008 Norbauer Inc, released under the MIT license<br/>
-Written by Jose Fernandez with support from The Sequoyah Group
+Written by Jose Fernandez with support from Norbauer Inc.
 
