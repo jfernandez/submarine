@@ -87,6 +87,10 @@ If you want to link to each of your blogs when the users visit your domain, you 
         </ul>
     </div>
 
+## TODO
+
+* Use `method_missing` instead of method_alias for the model name based helpers.
+
 ---
 Copyright (c) 2008 Norbauer Inc, released under the MIT license<br/>
 Written by Jose Fernandez with support from Norbauer Inc.
