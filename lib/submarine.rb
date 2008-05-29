@@ -16,7 +16,7 @@ protected
     method_name = method_id.to_s
     setter = method_name.chomp!("=") 
     model_name, method_name = method_name.split("_").first, method_name.split("_").last
-    if model_name == subdomain_model && %w(url host domain).include?(method_name)
+    if model_name == subdomain_model && %w(url host domain).include?(method_name) && setter.nil?
       send("submarine_#{method_name}")
     else
       super
