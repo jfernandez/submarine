@@ -3,25 +3,26 @@ module Submarine
   class SubdomainModelError < StandardError; end
   class SubdomainColumnError < StandardError; end
   
-  mattr_accessor :subdomain_model
-  mattr_accessor :subdomain_column
-  
-  def self.included(controller)
-    @@subdomain_model ||= 'user'
-    @@subdomain_column ||= 'login'
-    
-    alias_method "#{@@subdomain_model}_domain", :submarine_domain
-    alias_method "#{@@subdomain_model}_host", :submarine_host
-    alias_method "#{@@subdomain_model}_url", :submarine_url
-    controller.helper_method("#{@@subdomain_model}_domain", "current_subdomain", "#{@@subdomain_model}_host", "#{@@subdomain_model}_url")
-  end
+  def subdomain_model; 'user' end
+  def subdomain_column; 'login' end
   
 protected
 
+  def method_missing(method_id, *args)
+    method_name = method_id.to_s
+    setter = method_name.chomp!("=") 
+    model_name, method_name = method_name.split("_").first, method_name.split("_").last
+    if model_name == subdomain_model && %w(url host domain).include?(method_name)
+      send("submarine_#{method_name}")
+    else
+      super
+    end
+  end
+
   def default_submarine_subdomain
-    raise SubdomainModelError.new("@#{Submarine.subdomain_model} instance variable not found") if instance.nil?
-    raise SubdomainColumnError.new("@#{Submarine.subdomain_model} does not have a '#{Submarine.subdomain_column}' attribute") unless instance.respond_to?(Submarine.subdomain_column)
-    instance.send(Submarine.subdomain_column)
+    raise SubdomainModelError.new("@#{subdomain_model} instance variable not found") if instance.nil?
+    raise SubdomainColumnError.new("@#{subdomain_model} does not have a '#{subdomain_column}' attribute") unless instance.respond_to?(subdomain_column)
+    instance.send(subdomain_column)
   end
   
   def submarine_url(submarine_subdomain = default_submarine_subdomain, use_ssl = request.ssl?)
@@ -46,6 +47,6 @@ protected
 
 private
   def instance
-    instance_variable_get "@#{Submarine.subdomain_model}"
+    instance_variable_get "@#{subdomain_model}"
   end
 end 

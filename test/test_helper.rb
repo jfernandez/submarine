@@ -21,3 +21,25 @@ module ActionController
     end
   end
 end
+
+module Submarine
+  class User
+    def initialize(login)
+      @@login = login
+    end
+    
+    def login
+      @@login
+    end
+  end
+  
+  class Blog
+    def initialize(name)
+      @@name = name
+    end
+    
+    def name
+      @@name
+    end
+  end
+end

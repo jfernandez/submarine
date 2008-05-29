@@ -4,20 +4,21 @@ module Submarine
   class UsersController < ActionController::Base
     include Submarine
     public :current_subdomain, :default_submarine_subdomain
-  
+    
     def index() render :nothing => true end
     alias_method :show, :index
     def rescue_action(e) raise end
   end
-
-  class User
-    def initialize(login)
-      @@login = login
-    end
+  
+  class BlogsController < ActionController::Base
+    include Submarine
+    public :current_subdomain, :default_submarine_subdomain
     
-    def login
-      @@login
-    end
+    def subdomain_model; 'blog' end
+    def subdomain_column; 'name' end
+    def index() render :nothing => true end
+    alias_method :show, :index
+    def rescue_action(e) raise end
   end
 end
 
@@ -43,6 +44,24 @@ class SubmarineTest < Test::Unit::TestCase
   def test_should_return_default_submarine_subdomain
     @controller.instance_variable_set(:@user, Submarine::User.new('foobar'))
     assert_equal('foobar', @controller.default_submarine_subdomain)
+  end
+  
+  def test_controller_should_not_raise_any_errors_on_model_based_methods
+    @request.with_subdomain('foobar')
+    get :index
+    @controller.instance_variable_set(:@user, Submarine::User.new('foobar'))
+    assert_nothing_raised { @controller.user_url }
+    assert_nothing_raised { @controller.user_domain }
+    assert_nothing_raised { @controller.user_host }
+  end
+  
+  def test_model_based_methods_should_return_the_correct_strings
+    @request.with_subdomain('foobar')
+    get :index
+    @controller.instance_variable_set(:@user, Submarine::User.new('foobar'))
+    assert_equal('http://foobar.localhost.com', @controller.user_url)
+    assert_equal('localhost.com', @controller.user_domain)
+    assert_equal('foobar.localhost.com', @controller.user_host)
   end
   
 end
