@@ -24,9 +24,9 @@ protected
   end
 
   def default_submarine_subdomain
-    raise SubdomainModelError.new("@#{subdomain_model} instance variable not found") if instance.nil?
-    raise SubdomainColumnError.new("@#{subdomain_model} does not have a '#{subdomain_column}' attribute") unless instance.respond_to?(subdomain_column)
-    instance.send(subdomain_column)
+    raise SubdomainModelError.new("@#{subdomain_model} instance variable not found") if submarine_instance.nil?
+    raise SubdomainColumnError.new("@#{subdomain_model} does not have a '#{subdomain_column}' attribute") unless submarine_instance.respond_to?(subdomain_column)
+    submarine_instance.send(subdomain_column)
   end
   
   def submarine_url(submarine_subdomain = default_submarine_subdomain, use_ssl = request.ssl?)
@@ -50,7 +50,7 @@ protected
   end
 
 private
-  def instance
+  def submarine_instance
     instance_variable_get "@#{subdomain_model}"
   end
 end 
