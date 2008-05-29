@@ -98,6 +98,7 @@ If you want to link to each of your blogs when the users visit your domain, you 
 
 * <strike>Use `method_missing` instead of method_alias for the model name based helpers.</strike>
 * Helper method tests
+* Add subdomain based routing support
 
 ---
 Copyright (c) 2008 Norbauer Inc, released under the MIT license<br/>
