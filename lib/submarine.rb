@@ -3,6 +3,10 @@ module Submarine
   class SubdomainModelError < StandardError; end
   class SubdomainColumnError < StandardError; end
   
+  def self.included(controller)
+    controller.helper_method(:method_missing, :submarine_url, :submarine_host, :submarine_domain, :current_subdomain)
+  end
+  
   def subdomain_model; 'user' end
   def subdomain_column; 'login' end
   
