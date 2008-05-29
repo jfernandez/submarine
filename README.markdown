@@ -70,7 +70,7 @@ def PostsController < ApplicationController
 	before_filter :load_blog
 	
 	def subdomain_model; 'blog' end
-   def subdomain_column; 'name' end
+	def subdomain_column; 'name' end
 	
 	def index
 		@posts = @blog.posts
@@ -96,7 +96,7 @@ If you want to link to each of your blogs when the users visit your domain, you 
 
 ## TODO
 
-* Use `method_missing` instead of method_alias for the model name based helpers.
+* <strike>Use `method_missing` instead of method_alias for the model name based helpers.</strike>
 
 ---
 Copyright (c) 2008 Norbauer Inc, released under the MIT license<br/>
