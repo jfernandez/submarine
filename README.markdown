@@ -64,9 +64,11 @@ account_url('moo')
 You have a domain that hosts several blogs and you wish to shorten their URL from `http://www.domain.com/blogs/fooblog/posts` to `http://fooblog.domain.com/`
 
 <pre>
-def PostsController < ApplicationController
-	include Submarine
-	
+class ApplicationController < ActionController::Base
+   include Submarine
+end
+
+def PostsController < ApplicationController	
 	before_filter :load_blog
 	
 	def subdomain_model; 'blog' end
