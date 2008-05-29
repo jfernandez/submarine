@@ -26,15 +26,21 @@ class ApplicationController < ActionController::Base
 end
 </pre>
 
-* Submarine will generate the following helper methods (using the default settings): `user_url, user_host, user_domain`.  It will also provide you a method to retrieve the current request subdomain: `current_subdomain`
+* Submarine will generate the following helper methods (using the default settings): `user_url, user_host, user_domain`.  It will also provide you a method to retrieve the current request's subdomain: `current_subdomain`
 
-* By default, all helper methods will query @user.login when generating the subdomain part.  You can overwrite these defaults by setting the `subdomain_model` and `subdomain_column` attributes before including the module:
+* By default, all helper methods will query @user.login (hi restufl_authentication) when generating the subdomain part.  You can set these attributes by overwriting the `subdomain_model` and `subdomain_column` methods in your controller after including the module:
 
 <pre>
 class ApplicationController < ActionController::Base
-   Submarine.subdomain_model = 'account'
-   Submarine.subdomain_column = 'name'
    include Submarine
+   
+   def subdomain_model
+      'account'
+   end
+   
+   def subdomain_column
+      'name'
+   end
 end
 </pre>
 
@@ -59,11 +65,12 @@ You have a domain that hosts several blogs and you wish to shorten their URL fro
 
 <pre>
 def PostsController < ApplicationController
-	Submarine.subdomain_model = 'blog'
-	Submarine.subdomain_column = 'name'
 	include Submarine
 	
 	before_filter :load_blog
+	
+	def subdomain_model; 'blog' end
+   def subdomain_column; 'name' end
 	
 	def index
 		@posts = @blog.posts
