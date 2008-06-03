@@ -8,6 +8,7 @@ module Submarine
     def index() render :nothing => true end
     alias_method :show, :index
     def rescue_action(e) raise end
+    def method_missing(method_id, *args); super end
   end
   
   class BlogsController < ActionController::Base
@@ -29,6 +30,13 @@ class SubmarineTest < Test::Unit::TestCase
     @request = ActionController::TestRequest.new
     @response = ActionController::TestResponse.new
     ActionController::Routing::Routes.draw { |map| map.connect ':controller/:action/:id' }
+  end
+  
+  def test_controller_method_missing_should_not_override_plugin_version
+    @request.with_subdomain('foobar')
+    get :index
+    @controller.instance_variable_set(:@user, Submarine::User.new('foobar'))
+    assert_nothing_raised { @controller.user_url }
   end
   
   def test_controller_should_respond_to_current_subdomain_method

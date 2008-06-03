@@ -5,21 +5,22 @@ module Submarine
   
   def self.included(controller)
     controller.helper_method(:method_missing, :submarine_url, :submarine_host, :submarine_domain, :current_subdomain)
+    alias_method_chain(:method_missing, :submarine)
   end
   
   def subdomain_model; 'user' end
   def subdomain_column; 'login' end
   
 protected
-
-  def method_missing(method_id, *args)
+  
+  def method_missing_with_submarine(method_id, *args)
     method_name = method_id.to_s
     setter = method_name.chomp!("=") 
     model_name, method_name = method_name.split("_").first, method_name.split("_").last
     if model_name == subdomain_model && %w(url host domain).include?(method_name) && setter.nil?
       send("submarine_#{method_name}", *args)
     else
-      super
+      method_missing_without_submarine(method_id, *args)
     end
   end
 
