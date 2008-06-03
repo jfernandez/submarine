@@ -30,7 +30,6 @@ protected
   end
   
   def submarine_url(submarine_subdomain = default_submarine_subdomain, use_ssl = request.ssl?)
-    puts submarine_subdomain
     (use_ssl ? "https://" : "http://") + submarine_host(submarine_subdomain)
   end
   
