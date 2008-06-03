@@ -64,4 +64,12 @@ class SubmarineTest < Test::Unit::TestCase
     assert_equal('foobar.localhost.com', @controller.user_host)
   end
   
+  def test_model_based_methods_should_return_the_correct_string_when_a_parameter_is_used
+    @request.with_subdomain('foobar')
+    get :index
+    @controller.instance_variable_set(:@user, Submarine::User.new('foobar'))
+    assert_equal('http://quack.localhost.com', @controller.user_url('quack'))
+    assert_equal('quack.localhost.com', @controller.user_host('quack'))
+  end
+  
 end

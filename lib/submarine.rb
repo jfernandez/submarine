@@ -17,7 +17,7 @@ protected
     setter = method_name.chomp!("=") 
     model_name, method_name = method_name.split("_").first, method_name.split("_").last
     if model_name == subdomain_model && %w(url host domain).include?(method_name) && setter.nil?
-      send("submarine_#{method_name}")
+      send("submarine_#{method_name}", *args)
     else
       super
     end
@@ -30,6 +30,7 @@ protected
   end
   
   def submarine_url(submarine_subdomain = default_submarine_subdomain, use_ssl = request.ssl?)
+    puts submarine_subdomain
     (use_ssl ? "https://" : "http://") + submarine_host(submarine_subdomain)
   end
   
